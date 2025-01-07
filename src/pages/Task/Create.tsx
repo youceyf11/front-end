@@ -1,11 +1,12 @@
-{/* import {useEffect, useState} from "react";
-import { TaskResponse } from "../types/task-response.ts";
-import { createTask, deleteTask, getAllTasks, getTask, updateTask } from "../services/task-service.ts";
-import { TaskRequest } from "../types/task-request.ts";
-import {CategorieResponse} from "../types/categorie-response.ts";
-import {getAllCategories} from "../services/categorie-service.ts";
+import {useEffect, useState} from "react";
+import {TaskResponse} from "../../types/task-response.ts";
+import {CategorieResponse} from "../../types/categorie-response.ts";
+import {getAllCategories} from "../../services/categorie-service.ts";
+import {TaskRequest} from "../../types/task-request.ts";
+import {Link, useNavigate} from "react-router-dom";
+import { createTask } from '../../services/task-service.ts';
 
-export default function TaskManager() {
+export default function CreateTask() {
     const [task, setTask] = useState<Partial<TaskResponse>>({
         title: '',
         description: '',
@@ -14,9 +15,10 @@ export default function TaskManager() {
         statut: '',
         categorieId: ''
     });
-    const [categories, setCategories]= useState<CategorieResponse[]>([]);
+    const [categories, setCategories] = useState<CategorieResponse[]>([]);
+    const navigate= useNavigate();
 
-    function getCategories(){
+    function getCategories() {
         getAllCategories().then((response) => {
             setCategories(response.data);
             console.log(response.data);
@@ -31,67 +33,37 @@ export default function TaskManager() {
     }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setTask(prevTask => ({ ...prevTask, [name]: value }));
+        const {name, value} = e.target;
+        setTask(prevTask => ({...prevTask, [name]: value}));
     };
 
     const handleCreateTask = async () => {
-        const { title, description, dateEcheance, priorite, statut, categorieId } = task;
+        const {title, description, dateEcheance, priorite, statut, categorieId} = task;
 
         if (!title || !description || !dateEcheance || !priorite || !statut || !categorieId) {
             console.error('All fields are required');
             return;
         }
 
-        const taskRequest: TaskRequest = { title, description, dateEcheance: dateEcheance, priorite, statut, categorieId };
+        const taskRequest: TaskRequest = {
+            title,
+            description,
+            dateEcheance: dateEcheance,
+            priorite,
+            statut,
+            categorieId
+        };
 
         try {
             const response = await createTask(taskRequest);
             console.log('Task created:', response);
+            navigate('/tasks');
         } catch (error) {
             console.error('Error creating task:', error);
         }
     };
 
-    const handleUpdateTask = (id: string) => {
-        updateTask(id, task)
-            .then(response => {
-                console.log('Task Updated:', response.data);
-            })
-            .catch(error => {
-                console.log('Error updating task:', error);
-            });
-    };
 
-    const handleDeleteTask = (id: string) => {
-        deleteTask(id)
-            .then(response => {
-                console.log('Task deleted:', response.data);
-            })
-            .catch(error => {
-                console.log('Error deleting task:', error);
-            });
-    };
-
-    const handleGetTasks = () => {
-        getAllTasks()
-            .then(response => {
-                console.log('List of all tasks:', response.data);
-            })
-            .catch(error => {
-                console.log('Error getting all of tasks:', error);
-            });
-    };
-
-    const handleGetTask = (id: string) => {
-        getTask(id)
-            .then(response => {
-                console.log('Task you want is:', response.data);
-            })
-            .catch(error => {
-                console.log('Error getting your task:', error);
-            });
-    };
 
     return (
         <div>
@@ -134,18 +106,16 @@ export default function TaskManager() {
             <select name="categorieId" value={task.categorieId || ''}
                     onChange={handleInputChange}>
                 <option value="">Choose a categorie</option>
-                {categories.map((cat : CategorieResponse) => (
+                {categories.map((cat: CategorieResponse) => (
                     <option value={cat.id} key={cat.id}>{cat.name}</option>
-                    ))}
+                ))}
 
             </select>
             <button onClick={handleCreateTask}>Create Task</button>
-            <button onClick={handleGetTasks}>Get all the tasks</button>
-            <button onClick={() => task.id && handleDeleteTask(task.id)}>Delete Task</button>
-            <button onClick={() => task.id && handleUpdateTask(task.id)}>Update Task</button>
-            <button onClick={() => task.id && handleGetTask(task.id)}>Get a task</button>
+            <button>
+                <Link to="/tasks">Go to task page</Link>
+            </button>
+
         </div>
     );
 }
-
-*/}

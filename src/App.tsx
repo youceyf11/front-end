@@ -1,9 +1,11 @@
 import  { useEffect, useState } from 'react';
 import { Route, Routes } from "react-router-dom";
-import CategoriePage from "./pages/categories.tsx";
-import TaskPage from "./pages/tasks.tsx";
-import TaskManager from "./component/TaskManager.tsx";
-import CategorieManager from "./component/CategorieManager.tsx";
+import CategoriePage from "./pages/Category/List.tsx";
+import TaskPage from "./pages/Task/List.tsx";
+import CreateCategorie from "./pages/Category/Create.tsx";
+import CreateTask from "./pages/Task/Create.tsx";
+import UpdateTask from "./pages/Task/Update.tsx";
+import UpdateCategorie from "./pages/Category/Update.tsx";
 
 function App() {
     const [data, setData] = useState<string | null>(null);
@@ -20,9 +22,13 @@ function App() {
             {data ? <p>{data}</p> : <p>Loading...</p>}
             <Routes>
                 <Route path="/" element={<CategoriePage />} />
-                <Route path="/task" element={<TaskPage />} />
-                <Route path="/task-manager" element={<TaskManager />} />
-                <Route path="/categorie-manager" element={<CategorieManager />} />
+                <Route path="/tasks" element={<TaskPage />} />
+                <Route path="/categorie-list" element={<CategoriePage />} />
+                <Route path={"/create-category"} element={<CreateCategorie/>} />
+                <Route path={"/create-task"} element={<CreateTask />} />
+                <Route path={"/update-task"} element={<UpdateTask/>} />
+                <Route path={"/update-categorie"} element={<UpdateCategorie/>} />
+
             </Routes>
         </div>
     );
