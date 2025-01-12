@@ -3,7 +3,18 @@ import {TaskResponse} from "../../types/task-response.ts";
 import {deleteTask, getAllTasks} from "../../services/task-service.ts";
 import {getAllCategories} from "../../services/categorie-service.ts";
 import {CategorieResponse} from "../../types/categorie-response.ts";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Box, Button,
+    Container,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import {Link} from "react-router-dom";
 
 export default function TaskPage() {
@@ -48,19 +59,23 @@ export default function TaskPage() {
             });
     };
 
+
     return (
-        <>
-            <TableContainer component={Paper} className="container mt-4">
-                <button>
-                    <Link to={"/"}>Go to categorie</Link>
-                </button>
-                <button>
-                    <Link to={"/create-task"}>Create a task</Link>
-                </button>
-                <button>
-                    <Link to={"/update-task"}>Update task</Link>
-                </button>
-                <Table sx={{ minWidth: 600}} aria-label="simple table">
+        <Container maxWidth="lg">
+            <Box display="flex" justifyContent="space-between" alignItems="center" my={1} >
+                <Typography variant="h4" component="h1">Tasks</Typography>
+
+
+                <Button variant="contained" color="primary" component={Link} to={"/create-task"}>
+                    Create Task
+                </Button>
+                <Button variant="contained" color="primary" component={Link} to={"/categorie-list"}>
+                    Go to Categories
+                </Button>
+            </Box>
+                <TableContainer component={Paper}>
+
+                <Table sx={{ minWidth: 600}} aria-label="tasks table">
                     <TableHead>
                         <TableRow>
                             <TableCell align="right">Id</TableCell>
@@ -87,6 +102,9 @@ export default function TaskPage() {
                                 <TableCell align="right">{task.createdAt}</TableCell>
                                 <TableCell align="right">{task.updatedAt}</TableCell>
                                 <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                                <button>
+                                    <Link to={"/update-task/" + task.id}>Update</Link>
+                                </button>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -94,7 +112,7 @@ export default function TaskPage() {
 
             </TableContainer>
 
-        </>
+        </Container>
     )
 
 
